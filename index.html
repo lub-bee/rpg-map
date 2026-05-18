@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RPG Map Editor</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div id="app">
+
+    <div id="toolbar">
+      <div id="tool-group">
+        <button data-tool="wall">Wall</button>
+        <button data-tool="arc">Arc</button>
+        <button data-tool="select">Select</button>
+        <button data-tool="decor">Decor</button>
+      </div>
+      <div id="mode-toggle">
+        <button class="mode-btn active" data-mode="edit">Edit</button>
+        <button class="mode-btn" data-mode="preview">Preview</button>
+      </div>
+      <div id="export-group">
+        <button data-action="save-json">Save JSON</button>
+        <button data-action="load-json">Load JSON</button>
+        <button data-action="export-svg">Export SVG</button>
+        <button data-action="export-png">Export PNG</button>
+      </div>
+    </div>
+
+    <div id="workspace">
+
+      <div id="panel-left">
+        <section id="layer-panel">
+          <div class="panel-title">Layers</div>
+          <ul class="panel-list"></ul>
+        </section>
+        <section id="level-panel">
+          <div class="panel-title">Levels</div>
+          <ul class="panel-list"></ul>
+        </section>
+        <section id="area-panel">
+          <div class="panel-title">Areas</div>
+          <ul class="panel-list"></ul>
+        </section>
+      </div>
+
+      <div id="canvas-container">
+        <canvas id="map-canvas"></canvas>
+      </div>
+
+      <div id="panel-right">
+        <section id="inspector">
+          <div class="panel-title">Inspector</div>
+          <p class="panel-placeholder">Select an entity</p>
+        </section>
+        <section id="texture-panel">
+          <div class="panel-title">Texture</div>
+          <div class="swatches"></div>
+        </section>
+        <section id="element-panel">
+          <div class="panel-title">Elements</div>
+          <ul class="panel-list"></ul>
+        </section>
+      </div>
+
+    </div>
+
+    <div id="statusbar">
+      <span id="coords">x: 0, y: 0</span>
+      <span id="zoom">100%</span>
+      <span id="active-tool">No tool</span>
+    </div>
+
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

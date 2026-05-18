@@ -23,9 +23,9 @@ Tous les éléments sont éditables après placement. Export JSON / SVG / Image.
 | 1 | Canvas, Grid & Display Modes | ✅ Livré |
 | 2 | Nodes & Walls | ✅ Livré |
 | 3 | Layers System | ✅ Livré |
-| 4 | Textures & Wall Elements | 🟡 En cours |
-| 5 | Decor Elements & Groups | ⏳ En attente |
-| 6 | Areas | ⏳ En attente |
+| 4 | Textures & Wall Elements | ✅ Livré |
+| 5 | Decor Elements & Groups | ✅ Livré |
+| 6 | Areas | 🟡 En cours |
 | 7 | Advanced Geometry (arcs, circles) | ⏳ En attente |
 | 8 | Entity Editor | ⏳ En attente |
 | 9 | Export (JSON / SVG / PNG) | ⏳ En attente |

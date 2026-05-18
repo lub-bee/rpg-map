@@ -1,5 +1,6 @@
 import { getState, dispatch } from '../core/state.js';
 import { execute } from '../core/history.js';
+import { on } from '../core/events.js';
 import { addLayerRenderer, getCamera } from '../canvas/renderer.js';
 import { snapScreenToGrid, isNearNode } from '../canvas/snap.js';
 import { createNode, createWall } from '../data/schema.js';
@@ -7,6 +8,7 @@ import { worldToScreen } from '../canvas/coords.js';
 
 let _chain = [];
 let _ghostPos = null;
+let _defaultTexture = 'grid';
 
 function addNode(node) {
   execute({
@@ -103,7 +105,7 @@ function onClick(e) {
   if (_chain.length > 0) {
     const originNode = nodes.find(n => n.id === _chain[0]);
     if (originNode && isNearNode(wx, wy, [originNode], camera, gridSize)) {
-      const wall = createWall(_chain[_chain.length - 1], _chain[0]);
+      const wall = createWall(_chain[_chain.length - 1], _chain[0], { texture: _defaultTexture });
       addWall(wall);
       _chain = [];
       _ghostPos = null;
@@ -115,7 +117,7 @@ function onClick(e) {
   addNode(newNode);
 
   if (_chain.length > 0) {
-    const wall = createWall(_chain[_chain.length - 1], newNode.id);
+    const wall = createWall(_chain[_chain.length - 1], newNode.id, { texture: _defaultTexture });
     addWall(wall);
   }
 
@@ -166,6 +168,7 @@ function renderPreview(ctx, canvas, camera, state) {
 }
 
 export function initWallTool(canvas) {
+  on('tool:set-default-texture', (texture) => { _defaultTexture = texture; });
   addLayerRenderer(renderPreview);
 
   canvas.addEventListener('click', onClick);

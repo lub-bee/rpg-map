@@ -151,6 +151,21 @@
 
 ---
 
+## DISC-011 — 2026-05-18 — PM → Texture Agent / Decor Agent (Phases 4+5)
+
+**Participants :** PM, Texture Agent, Decor Agent
+
+**Résumé :** Dispatch parallèle Phases 4 et 5. Texture Agent produit textures.js, texture-panel.js, element-panel.js, wall-element.js. Decor Agent produit decor-renderer.js, decor-tool.js, decor-panel.js.
+
+**Corrections PM post-review :**
+- wall-tool.js mis à jour : import on(), _defaultTexture, abonnement tool:set-default-texture, texture sur createWall()
+- main.js reécrit pour intégrer tous les modules phases 4+5
+- main.css : classes .swatch, .panel-item ajoutées
+
+**Décisions issues :** DEC-030 à DEC-031
+
+---
+
 ## Template pour les discussions internes (agents)
 
 ```

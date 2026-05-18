@@ -242,4 +242,20 @@ Structure de base :
 
 **Décision :** Chaque module maintient son propre `Set _visible` mis à jour via l'event `layer:visibility-change`.
 
-**Raison :** Découplage — le renderer ne dépend pas du panel UI. Les deux se synchronisent via le bus d'events sans couplage direct..
+**Raison :** Découplage — le renderer ne dépend pas du panel UI. Les deux se synchronisent via le bus d'events sans couplage direct.
+
+---
+
+## DEC-030 — 2026-05-18 — Texture par défaut propagée via event tool:set-default-texture
+
+**Décision :** Le texture-panel émet `'tool:set-default-texture'` quand aucun mur n'est sélectionné. Le wall-tool écoute cet event et stocke `_defaultTexture` en closure.
+
+**Raison :** Découplage UI ↔ outil sans passer par le state. La texture par défaut est un état transitoire de l'outil, pas une donnée persistante de la carte.
+
+---
+
+## DEC-031 — 2026-05-18 — Rendu décors Phase 5 : formes géométriques simples
+
+**Décision :** Les decor nodes sont rendus avec des formes géométriques colorées (cercle = table, carré = chaise, etc.). Pas d'icônes ou d'images en Phase 5.
+
+**Raison :** YAGNI — le rendu symbolique est suffisant pour valider l'UX. Une Phase future pourra ajouter des sprites si nécessaire. Les formes sont WYSIWYG (identiques en Edit et Preview)..

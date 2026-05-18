@@ -115,6 +115,20 @@
 
 ---
 
+## DISC-008 — 2026-05-18 — PM → Canvas Agent / UI Agent (Phase 1)
+
+**Participants :** PM, Canvas Agent, UI Agent
+
+**Résumé :** Dispatch parallèle Phase 1. Canvas Agent produit coords.js, camera.js, grid.js. UI Agent produit toolbar.js, mode-toggle.js, statusbar.js.
+
+**Correction post-review :** statusbar.js montrait gridSize comme zoom — corrigé par PM pour écouter l'event `camera:change` (DEC-022).
+
+**Décisions issues :** DEC-020 à DEC-023
+
+**Fichiers créés :** renderer.js (PM), main.js (mis à jour par PM)
+
+---
+
 ## Template pour les discussions internes (agents)
 
 ```

@@ -163,3 +163,35 @@ Structure de base :
 **Décision :** Classes `.panel-title`, `.panel-list`, `.panel-placeholder`, `.swatches`, `.mode-btn` ajoutées dans le HTML et le CSS.
 
 **Raison :** Nécessaires pour cibler les éléments de manière stable depuis le CSS et le JS futur, sans couplage sur la structure DOM.
+
+---
+
+## DEC-020 — 2026-05-18 — Camera gérée en closure dans attachCameraControls, events sur window
+
+**Décision :** `attachCameraControls` stocke la camera en closure locale. `mousemove`/`mouseup`/`keydown`/`keyup` écoutent sur `window` (pas sur le canvas).
+
+**Raison :** Le drag reste actif si la souris sort du canvas — comportement attendu pour le pan.
+
+---
+
+## DEC-021 — 2026-05-18 — renderer.js expose addLayerRenderer() pour les phases suivantes
+
+**Décision :** Le renderer expose `addLayerRenderer(fn)` — les modules Phase 2+ s'y enregistrent pour dessiner leurs entités, sans modifier renderer.js.
+
+**Raison :** Découplage : chaque phase ajoute son rendu sans toucher au coordinateur central.
+
+---
+
+## DEC-022 — 2026-05-18 — Statusbar zoom via event camera:change (pas via state)
+
+**Décision :** Le zoom réel (camera.zoom) est émis via `emit('camera:change', camera)` par le renderer. La statusbar écoute cet event — pas le state.
+
+**Raison :** Le zoom de la camera n'est pas dans le state Redux (c'est un état UI de rendu pur). Passer par le bus d'events évite de polluer le state avec une valeur éphémère.
+
+---
+
+## DEC-023 — 2026-05-18 — Grille visible en Edit uniquement
+
+**Décision :** La grille est dessinée uniquement si `state.ui.mode === DISPLAY_MODE.EDIT`.
+
+**Raison :** REQ-023 — mode Preview = WYSIWYG pur, sans artefacts d'édition.

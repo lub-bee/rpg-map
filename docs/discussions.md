@@ -129,6 +129,18 @@
 
 ---
 
+## DISC-009 — 2026-05-18 — PM → Snap/Entity Agent / Tool Agent (Phase 2)
+
+**Participants :** PM, Snap+Entity Agent, Tool Agent
+
+**Résumé :** Dispatch parallèle Phase 2. Agent 1 produit snap.js, node.js, wall.js. Agent 2 produit wall-tool.js, free-node-tool.js, tool-manager.js.
+
+**Ajouts PM post-review :** entities-renderer.js (couche de rendu des entités persistées), main.js mis à jour (Ctrl+Z/Y, initToolManager, initEntitiesRenderer).
+
+**Décisions issues :** DEC-024 à DEC-027
+
+---
+
 ## Template pour les discussions internes (agents)
 
 ```

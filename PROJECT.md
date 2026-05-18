@@ -21,8 +21,8 @@ Tous les éléments sont éditables après placement. Export JSON / SVG / Image.
 |---|---|---|
 | 0 | Setup & Architecture | ✅ Livré |
 | 1 | Canvas, Grid & Display Modes | ✅ Livré |
-| 2 | Nodes & Walls | 🟡 En cours |
-| 3 | Layers System | ⏳ En attente |
+| 2 | Nodes & Walls | ✅ Livré |
+| 3 | Layers System | 🟡 En cours |
 | 4 | Textures & Wall Elements | ⏳ En attente |
 | 5 | Decor Elements & Groups | ⏳ En attente |
 | 6 | Areas | ⏳ En attente |

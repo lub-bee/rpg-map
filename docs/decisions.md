@@ -195,3 +195,35 @@ Structure de base :
 **Décision :** La grille est dessinée uniquement si `state.ui.mode === DISPLAY_MODE.EDIT`.
 
 **Raison :** REQ-023 — mode Preview = WYSIWYG pur, sans artefacts d'édition.
+
+---
+
+## DEC-024 — 2026-05-18 — drawNodes signature : originNodeId param explicite
+
+**Décision :** `drawNodes(ctx, nodes, camera, state, originNodeId = null)` — l'ID du node origine (pour le highlight de fermeture de forme) est passé en paramètre, pas lu depuis le tool state.
+
+**Raison :** `node.js` n'a pas connaissance du wall-tool state. Le highlight origin est géré par wall-tool via son propre addLayerRenderer.
+
+---
+
+## DEC-025 — 2026-05-18 — Tool listeners toujours attachés, activation par garde interne
+
+**Décision :** Tous les outils sont initialisés une fois (listeners attachés). Chaque outil vérifie `getState().ui.activeTool` en début de handler pour s'activer/désactiver.
+
+**Raison :** Simplifie le cycle de vie — pas de detach/reattach à chaque changement d'outil. Overhead négligeable.
+
+---
+
+## DEC-026 — 2026-05-18 — History commands : snapshot des entités en closure
+
+**Décision :** Les nodes/walls créés sont capturés en closure dans la commande history, pas relus depuis le state.
+
+**Raison :** Garantit que le undo cible le bon ID même si le state a évolué entre création et annulation.
+
+---
+
+## DEC-027 — 2026-05-18 — entities-renderer.js : module séparé pour le rendu des entités du state
+
+**Décision :** Le rendu des nodes et walls existants est dans `entities-renderer.js` (addLayerRenderer), distinct du rendu preview du wall-tool.
+
+**Raison :** Séparation claire : entités persistées (entities-renderer) vs état temporaire de l'outil (tool's own renderer).

@@ -19,8 +19,8 @@ Tous les éléments sont éditables après placement. Export JSON / SVG / Image.
 
 | Phase | Nom | Statut |
 |---|---|---|
-| 0 | Setup & Architecture | 🟡 Prêt à démarrer |
-| 1 | Canvas, Grid & Display Modes | ⏳ En attente |
+| 0 | Setup & Architecture | ✅ Livré |
+| 1 | Canvas, Grid & Display Modes | 🟡 En cours |
 | 2 | Nodes & Walls | ⏳ En attente |
 | 3 | Layers System | ⏳ En attente |
 | 4 | Textures & Wall Elements | ⏳ En attente |

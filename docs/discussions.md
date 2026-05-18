@@ -100,6 +100,21 @@
 
 ---
 
+## DISC-007 — 2026-05-18 — PM → Architect Agent / Frontend Agent (Phase 0)
+
+**Participants :** PM, Architect Agent, Frontend Agent
+
+**Résumé :** Dispatch parallèle Phase 0. Architect Agent produit schema.js, presets.js, events.js, state.js, history.js. Frontend Agent produit index.html et main.css.
+
+**Décisions issues :** DEC-014 à DEC-019
+
+**Impact :**
+- 7 fichiers créés dans `src/`
+- stub `src/js/main.js` ajouté par PM post-review
+- Phase 0 validée, Phase 1 démarre
+
+---
+
 ## Template pour les discussions internes (agents)
 
 ```

@@ -115,3 +115,51 @@ Structure de base :
 **Décision :** L'outil n'a pas encore de nom final. L'agent Marketing est responsable de proposer le nom, la tagline et les assets de communication.
 
 **Raison :** Ludo a délégué cette décision à l'agent Marketing via DISC-004.
+
+---
+
+## DEC-014 — 2026-05-18 — createId() : timestamp + random + compteur auto-incrémenté
+
+**Décision :** `createId()` combine `Date.now().toString(36)` + 5 chars random + compteur incrémental.
+
+**Raison :** Garantit l'unicité même si deux IDs sont générés dans la même milliseconde sans dépendance externe (pas de crypto.randomUUID pour la compat large).
+
+---
+
+## DEC-015 — 2026-05-18 — Types furniture comme chaînes libres (non énumérés dans ELEMENT_TYPE)
+
+**Décision :** `ELEMENT_TYPE` contient uniquement les types d'éléments de mur (door, window, opening, secret, carpet). Les types de décors/meubles (table, chair, bed...) sont des chaînes libres dans `presets.js` et `decorNodes`.
+
+**Raison :** Les meubles sont extensibles et gérés par le renderer Phase 5. Les typer dans une enum maintenant créerait une enum incomplète et trompeuse.
+
+---
+
+## DEC-016 — 2026-05-18 — UPDATE_ENTITY : scan toutes les collections
+
+**Décision :** L'action `UPDATE_ENTITY` passe sur `nodes`, `walls`, `decorNodes` et `areas` en une seule passe pour trouver l'entité par ID.
+
+**Raison :** Simplifie l'API — l'appelant n'a pas à savoir dans quelle collection vit l'entité. Overhead négligeable sur les tailles de cartes attendues.
+
+---
+
+## DEC-017 — 2026-05-18 — history.js : snapshot de `map` uniquement, pas de `ui`
+
+**Décision :** Undo/redo ne restaure que `state.map`, pas `state.ui`.
+
+**Raison :** L'undo est une opération sur les données de la carte, pas sur l'état de l'interface (outil actif, sélection...). Restaurer l'UI serait déstabilisant pour l'utilisateur.
+
+---
+
+## DEC-018 — 2026-05-18 — data-* attributes sur les boutons toolbar
+
+**Décision :** Boutons toolbar annotés avec `data-tool`, `data-mode`, `data-action` pour le binding JS.
+
+**Raison :** Évite le couplage sur des IDs internes — les modules JS branchent leurs event listeners via `querySelectorAll('[data-tool]')` etc.
+
+---
+
+## DEC-019 — 2026-05-18 — Classes CSS utilitaires ajoutées
+
+**Décision :** Classes `.panel-title`, `.panel-list`, `.panel-placeholder`, `.swatches`, `.mode-btn` ajoutées dans le HTML et le CSS.
+
+**Raison :** Nécessaires pour cibler les éléments de manière stable depuis le CSS et le JS futur, sans couplage sur la structure DOM.

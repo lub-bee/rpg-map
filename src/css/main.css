@@ -1,0 +1,156 @@
+/* ===== Reset minimal ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== Base ===== */
+html, body {
+  height: 100%;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  color: #e0e0e0;
+  background: #1a1a2e;
+}
+
+/* ===== App shell ===== */
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ===== Toolbar ===== */
+#toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 48px;
+  padding: 0 12px;
+  background: #16213e;
+  flex-shrink: 0;
+}
+
+#tool-group,
+#mode-toggle,
+#export-group {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+#mode-toggle {
+  margin-left: auto;
+}
+
+#export-group {
+  margin-left: 12px;
+}
+
+/* ===== Buttons ===== */
+button {
+  background: #0f3460;
+  color: #e0e0e0;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.15s;
+}
+
+button:hover {
+  background: #e94560;
+}
+
+button.active {
+  background: #e94560;
+}
+
+/* ===== Workspace ===== */
+#workspace {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ===== Panels ===== */
+#panel-left,
+#panel-right {
+  width: 220px;
+  flex-shrink: 0;
+  background: #0f3460;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== Panel sections ===== */
+#panel-left section,
+#panel-right section {
+  border-top: 1px solid #1a3a5c;
+}
+
+#panel-left section:first-child,
+#panel-right section:first-child {
+  border-top: none;
+}
+
+.panel-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #8892b0;
+  padding: 8px 12px 4px;
+}
+
+.panel-list {
+  list-style: none;
+  padding: 0 0 8px 0;
+}
+
+.panel-placeholder {
+  padding: 6px 12px 10px;
+  font-size: 12px;
+  color: #8892b0;
+}
+
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px 12px 10px;
+}
+
+/* ===== Canvas container ===== */
+#canvas-container {
+  flex: 1;
+  background: #0d0d1a;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#map-canvas {
+  background: #1e1e2e;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ===== Statusbar ===== */
+#statusbar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 28px;
+  padding: 0 12px;
+  background: #16213e;
+  flex-shrink: 0;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 11px;
+  color: #8892b0;
+}

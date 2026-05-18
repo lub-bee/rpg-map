@@ -29,7 +29,11 @@ Tous les éléments sont éditables après placement. Export JSON / SVG / Image.
 | 7 | Advanced Geometry (arcs, circles) | ✅ Livré |
 | 8 | Entity Editor | ✅ Livré |
 | 9 | Export (JSON / SVG / PNG) | ✅ Livré |
-| 10 | Polish & Deploy | ✅ Livré — en attente création repo GitHub |
+| 10 | Polish & Deploy | ✅ Livré |
+
+## URL publique
+
+**https://lub-bee.github.io/rpg-map/**
 
 ## Stack technique
 

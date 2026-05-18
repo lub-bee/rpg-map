@@ -258,4 +258,28 @@ Structure de base :
 
 **Décision :** Les decor nodes sont rendus avec des formes géométriques colorées (cercle = table, carré = chaise, etc.). Pas d'icônes ou d'images en Phase 5.
 
-**Raison :** YAGNI — le rendu symbolique est suffisant pour valider l'UX. Une Phase future pourra ajouter des sprites si nécessaire. Les formes sont WYSIWYG (identiques en Edit et Preview)..
+**Raison :** YAGNI — le rendu symbolique est suffisant pour valider l'UX. Une Phase future pourra ajouter des sprites si nécessaire. Les formes sont WYSIWYG (identiques en Edit et Preview).
+
+---
+
+## DEC-032 — 2026-05-18 — detectAreas : DFS limité à 6 nodes par cycle (best effort)
+
+**Décision :** L'algorithme de détection d'areas ne cherche que les cycles de 3 à 6 nodes.
+
+**Raison :** Les cycles plus longs explosent en complexité et les cartes RPG ont rarement des pièces de plus de 6 coins. Best effort acceptable pour Phase 6.
+
+---
+
+## DEC-033 — 2026-05-18 — Arc wall stocké dans level.walls avec type ARC
+
+**Décision :** Les arc walls sont stockés dans `level.walls` comme les murs droits, avec `type: WALL_TYPE.ARC` et les propriétés `cx`, `cy` additionnelles.
+
+**Raison :** Modèle unifié — le renderer itère une seule collection, filtre par type. Évite deux collections séparées à maintenir.
+
+---
+
+## DEC-034 — 2026-05-18 — Rayon d'arc = moyenne distance centre→A et centre→B
+
+**Décision :** Si A et B ne sont pas exactement équidistants du centre (erreur de snap), le rayon utilisé est la moyenne des deux distances.
+
+**Raison :** Robustesse au snap imprécis. L'arc reste visuellement cohérent même si le centre n'est pas exactement équidistant des deux points..

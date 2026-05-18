@@ -25,9 +25,9 @@ Tous les éléments sont éditables après placement. Export JSON / SVG / Image.
 | 3 | Layers System | ✅ Livré |
 | 4 | Textures & Wall Elements | ✅ Livré |
 | 5 | Decor Elements & Groups | ✅ Livré |
-| 6 | Areas | 🟡 En cours |
-| 7 | Advanced Geometry (arcs, circles) | ⏳ En attente |
-| 8 | Entity Editor | ⏳ En attente |
+| 6 | Areas | ✅ Livré |
+| 7 | Advanced Geometry (arcs, circles) | ✅ Livré |
+| 8 | Entity Editor | 🟡 En cours |
 | 9 | Export (JSON / SVG / PNG) | ⏳ En attente |
 | 10 | Polish & Deploy | ⏳ En attente |
 

@@ -166,6 +166,18 @@
 
 ---
 
+## DISC-012 — 2026-05-18 — PM → Area Agent / Arc Agent (Phases 6+7)
+
+**Participants :** PM, Area Agent, Arc Agent
+
+**Résumé :** Dispatch parallèle Phases 6+7. Area Agent produit area.js, area-tool.js, separator-wall-tool.js, area-renderer.js, area-panel.js, et met à jour main.js + index.html. Arc Agent produit arc-wall.js, arc-tool.js, snap-arc.js, et met à jour layer-renderer.js.
+
+**Correction PM :** ajout de initArcTool dans main.js (manquant du agent Phase 6 update).
+
+**Décisions issues :** DEC-032 à DEC-034
+
+---
+
 ## Template pour les discussions internes (agents)
 
 ```

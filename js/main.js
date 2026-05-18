@@ -16,7 +16,10 @@ import { initDecorTool } from './tools/decor-tool.js';
 import { initAreaTool } from './tools/area-tool.js';
 import { initSeparatorWallTool } from './tools/separator-wall-tool.js';
 import { initArcTool } from './tools/arc-tool.js';
+import { initSelectTool } from './tools/select-tool.js';
+import { initInspector } from './ui/inspector.js';
 import { undo, redo, canUndo, canRedo } from './core/history.js';
+import { initExportPanel } from './ui/export-panel.js';
 
 function boot() {
   const canvas = document.getElementById('map-canvas');
@@ -29,6 +32,8 @@ function boot() {
   initElementPanel();
   initDecorPanel();
   initAreaPanel();
+  initExportPanel();
+  initInspector();
 
   // Register layer renderers before initRenderer starts the RAF loop
   initLayerRenderer();
@@ -42,6 +47,7 @@ function boot() {
   initAreaTool(canvas);
   initSeparatorWallTool(canvas);
   initArcTool(canvas);
+  initSelectTool(canvas);
 
   document.addEventListener('keydown', (e) => {
     if (e.target.closest('input, textarea, select')) return;

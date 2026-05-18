@@ -66,6 +66,11 @@ const _reducers = {
     ui: { ...state.ui, selectedIds: payload },
   }),
 
+  SET_HOVER: (state, payload) => ({
+    ...state,
+    ui: { ...state.ui, _hoverNodeId: payload },
+  }),
+
   TOGGLE_AREAS: (state) => ({
     ...state,
     ui: { ...state.ui, showAreas: !state.ui.showAreas },

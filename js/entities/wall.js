@@ -45,11 +45,11 @@ export function drawWall(ctx, wall, nodes, camera, options = {}) {
 }
 
 export function drawWalls(ctx, walls, nodes, camera, state) {
-  const selectedIds = state.ui?.selectedIds ?? new Set();
+  const selectedIds = state.ui?.selectedIds ?? [];
 
   for (const wall of walls) {
     drawWall(ctx, wall, nodes, camera, {
-      selected: selectedIds.has(wall.id),
+      selected: selectedIds.includes(wall.id),
     });
   }
 }

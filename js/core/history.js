@@ -14,6 +14,14 @@ export function execute(command) {
   _redoStack = [];
 }
 
+export function executeWithBefore(command, mapBefore) {
+  const after = command.execute(getState());
+  dispatch({ type: 'SET_MAP', payload: after.map });
+  _undoStack.push({ before: mapBefore, after: getState().map, command });
+  if (_undoStack.length > MAX_UNDO) _undoStack.shift();
+  _redoStack = [];
+}
+
 export function undo() {
   if (!_undoStack.length) return;
   const entry = _undoStack.pop();

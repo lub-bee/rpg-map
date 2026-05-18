@@ -1,5 +1,18 @@
-import { getState, dispatch, subscribe } from './core/state.js';
+import { init as initRenderer } from './canvas/renderer.js';
+import { initToolbar } from './ui/toolbar.js';
+import { initModeToggle } from './ui/mode-toggle.js';
+import { initStatusbar } from './ui/statusbar.js';
 
-// Entry point — wired up progressively each phase.
-// Phase 0: module loads, state initializes, nothing rendered yet.
-console.log('RPG Map Editor — Phase 0 loaded', getState());
+function boot() {
+  const canvas = document.getElementById('map-canvas');
+  initStatusbar();
+  initToolbar();
+  initModeToggle();
+  initRenderer(canvas);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', boot);
+} else {
+  boot();
+}

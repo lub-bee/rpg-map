@@ -141,6 +141,16 @@
 
 ---
 
+## DISC-010 — 2026-05-18 — PM → Layer Agent (Phase 3)
+
+**Participants :** PM, Layer Agent
+
+**Résumé :** Phase 3 dispatch unique. Agent produit layer-panel.js, layer-renderer.js, styles CSS, et met à jour main.js.
+
+**Décisions issues :** DEC-028, DEC-029
+
+---
+
 ## Template pour les discussions internes (agents)
 
 ```

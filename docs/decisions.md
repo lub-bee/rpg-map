@@ -226,4 +226,20 @@ Structure de base :
 
 **Décision :** Le rendu des nodes et walls existants est dans `entities-renderer.js` (addLayerRenderer), distinct du rendu preview du wall-tool.
 
-**Raison :** Séparation claire : entités persistées (entities-renderer) vs état temporaire de l'outil (tool's own renderer).
+**Raison :** Séparation claire : entités persistées (entities-renderer) vs état temporaire de l'outil (tool's own renderer)
+
+---
+
+## DEC-028 — 2026-05-18 — Styles layer-panel intégrés dans main.css (pas de fichier séparé)
+
+**Décision :** Les styles `.layer-item`, `.layer-toggle`, `.layer-label` ajoutés dans `src/css/main.css`.
+
+**Raison :** Cohérence avec l'approche mono-fichier CSS existante. Le projet est trop petit pour justifier plusieurs fichiers CSS.
+
+---
+
+## DEC-029 — 2026-05-18 — _visible Set dupliqué dans layer-panel.js ET layer-renderer.js
+
+**Décision :** Chaque module maintient son propre `Set _visible` mis à jour via l'event `layer:visibility-change`.
+
+**Raison :** Découplage — le renderer ne dépend pas du panel UI. Les deux se synchronisent via le bus d'events sans couplage direct..

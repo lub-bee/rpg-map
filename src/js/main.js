@@ -1,8 +1,9 @@
 import { init as initRenderer } from './canvas/renderer.js';
-import { initEntitiesRenderer } from './canvas/entities-renderer.js';
+import { initLayerRenderer } from './canvas/layer-renderer.js';
 import { initToolbar } from './ui/toolbar.js';
 import { initModeToggle } from './ui/mode-toggle.js';
 import { initStatusbar } from './ui/statusbar.js';
+import { initLayerPanel } from './ui/layer-panel.js';
 import { initToolManager } from './tools/tool-manager.js';
 import { undo, redo, canUndo, canRedo } from './core/history.js';
 
@@ -12,7 +13,8 @@ function boot() {
   initStatusbar();
   initToolbar();
   initModeToggle();
-  initEntitiesRenderer();
+  initLayerPanel();
+  initLayerRenderer();
   initRenderer(canvas);
   initToolManager(canvas);
 

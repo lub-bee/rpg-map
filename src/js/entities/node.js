@@ -36,13 +36,13 @@ export function drawNode(ctx, node, camera, options = {}) {
 }
 
 export function drawNodes(ctx, nodes, camera, state, originNodeId = null) {
-  const selectedIds = state.ui?.selectedIds ?? new Set();
+  const selectedIds = state.ui?.selectedIds ?? [];
   const hoverNodeId = state.ui?._hoverNodeId ?? null;
 
   for (const node of nodes) {
     drawNode(ctx, node, camera, {
       highlight: node.id === hoverNodeId,
-      selected: selectedIds.has(node.id),
+      selected: selectedIds.includes(node.id),
       isOrigin: node.id === originNodeId,
     });
   }

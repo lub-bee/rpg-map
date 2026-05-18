@@ -282,4 +282,36 @@ Structure de base :
 
 **Décision :** Si A et B ne sont pas exactement équidistants du centre (erreur de snap), le rayon utilisé est la moyenne des deux distances.
 
-**Raison :** Robustesse au snap imprécis. L'arc reste visuellement cohérent même si le centre n'est pas exactement équidistant des deux points..
+**Raison :** Robustesse au snap imprécis. L'arc reste visuellement cohérent même si le centre n'est pas exactement équidistant des deux points.
+
+---
+
+## DEC-035 — 2026-05-18 — executeWithBefore : snapshot pré-drag pour undo atomique
+
+**Décision :** `history.js` expose `executeWithBefore(command, mapBefore)` pour enregistrer un undo avec le snapshot capturé avant le début du drag (pas après les dispatches temps réel).
+
+**Raison :** Pendant le drag, `dispatch UPDATE_ENTITY` est appelé à chaque frame. Sans snapshot pré-drag, `before === after` dans l'undo stack et Ctrl+Z ne fonctionnerait pas.
+
+---
+
+## DEC-036 — 2026-05-18 — Priorité détection entités : nodes > decorNodes > walls
+
+**Décision :** Le select-tool cherche dans l'ordre : nodes (threshold 10px), decorNodes (threshold 10px), puis murs (distance point-segment < 8px).
+
+**Raison :** Les nodes sont les entités les plus petites et les plus interactives — ils doivent avoir priorité sur les murs qui les connectent.
+
+---
+
+## DEC-037 — 2026-05-18 — Export SVG en coordonnées world (pas screen)
+
+**Décision :** Le SVG est généré en coordonnées world (pas en pixels écran). Bounding box calculé sur les positions des nodes avec padding 32px.
+
+**Raison :** L'export est indépendant du zoom/pan courant — toujours la même taille pour la même carte.
+
+---
+
+## DEC-038 — 2026-05-18 — OPENING non exporté en SVG (non reproductible)
+
+**Décision :** L'élément OPENING utilise `clearRect` sur le canvas et n'a pas d'équivalent SVG direct. Il n'est pas exporté en SVG.
+
+**Raison :** Limitation technique de SVG. Acceptable pour Phase 9 — une future phase pourrait le gérer via clip-path..

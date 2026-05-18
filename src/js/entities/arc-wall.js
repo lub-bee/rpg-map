@@ -78,12 +78,12 @@ export function drawArcWall(ctx, arcWall, nodes, camera, options = {}) {
 }
 
 export function drawArcWalls(ctx, walls, nodes, camera, state) {
-  const selectedIds = state.ui?.selectedIds ?? new Set();
+  const selectedIds = state.ui?.selectedIds ?? [];
 
   for (const wall of walls) {
     if (wall.type !== WALL_TYPE.ARC) continue;
     drawArcWall(ctx, wall, nodes, camera, {
-      selected: selectedIds.has(wall.id),
+      selected: selectedIds.includes(wall.id),
     });
   }
 }

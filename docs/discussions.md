@@ -178,6 +178,16 @@
 
 ---
 
+## DISC-013 — 2026-05-18 — PM → Select Agent / Export Agent (Phases 8+9)
+
+**Participants :** PM, Select Agent, Export Agent
+
+**Résumé :** Dispatch parallèle Phases 8+9. Select Agent produit select-tool.js, inspector.js, met à jour state.js (SET_HOVER), history.js (executeWithBefore), node/wall/arc-wall.js (bug fix selectedIds). Export Agent produit json-exporter.js, svg-exporter.js, image-exporter.js, export-panel.js.
+
+**Décisions issues :** DEC-035 à DEC-038
+
+---
+
 ## Template pour les discussions internes (agents)
 
 ```

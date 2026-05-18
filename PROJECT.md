@@ -29,7 +29,7 @@ Tous les éléments sont éditables après placement. Export JSON / SVG / Image.
 | 7 | Advanced Geometry (arcs, circles) | ✅ Livré |
 | 8 | Entity Editor | ✅ Livré |
 | 9 | Export (JSON / SVG / PNG) | ✅ Livré |
-| 10 | Polish & Deploy | 🟡 En cours |
+| 10 | Polish & Deploy | ✅ Livré — en attente création repo GitHub |
 
 ## Stack technique
 

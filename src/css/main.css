@@ -288,6 +288,80 @@ button.active {
   cursor: not-allowed;
 }
 
+/* ===== Level panel ===== */
+.level-item {
+  padding: 4px 12px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.level-item:hover { background: #1a3a5c; }
+.level-item.active { background: #1a3a5c; color: #e94560; }
+
+.level-add-btn {
+  display: block;
+  width: calc(100% - 24px);
+  margin: 6px 12px;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+/* ===== Help overlay ===== */
+#help-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+#help-modal {
+  background: #16213e;
+  border: 1px solid #1a3a5c;
+  border-radius: 8px;
+  padding: 20px 24px;
+  min-width: 320px;
+}
+
+.help-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e0e0e0;
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#help-close {
+  background: none;
+  border: none;
+  color: #8892b0;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+}
+
+#help-close:hover { color: #e94560; background: none; }
+
+.help-table { width: 100%; border-collapse: collapse; }
+.help-table tr { border-bottom: 1px solid #1a3a5c; }
+.help-table tr:last-child { border-bottom: none; }
+.help-table td { padding: 5px 8px; font-size: 13px; color: #ccd6f6; }
+.help-table td:first-child { width: 140px; }
+
+kbd {
+  background: #0f3460;
+  border: 1px solid #2a4a7a;
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-size: 11px;
+  font-family: monospace;
+  color: #e0e0e0;
+}
+
 /* ===== Statusbar ===== */
 #statusbar {
   display: flex;

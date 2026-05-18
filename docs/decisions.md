@@ -314,4 +314,28 @@ Structure de base :
 
 **Décision :** L'élément OPENING utilise `clearRect` sur le canvas et n'a pas d'équivalent SVG direct. Il n'est pas exporté en SVG.
 
-**Raison :** Limitation technique de SVG. Acceptable pour Phase 9 — une future phase pourrait le gérer via clip-path..
+**Raison :** Limitation technique de SVG. Acceptable pour Phase 9 — une future phase pourrait le gérer via clip-path.
+
+---
+
+## DEC-039 — 2026-05-18 — Nom de l'outil : Cartomancer (décision Marketing Agent)
+
+**Décision :** L'outil s'appelle **Cartomancer**. Tagline : "Draw your dungeon. One click at a time."
+
+**Raison :** Court, mémorable, évoque cartographie + magie RPG, valide comme nom de repo GitHub. Choix de l'agent Marketing sur 3 propositions.
+
+---
+
+## DEC-040 — 2026-05-18 — GitHub Pages : redirect root index.html → src/index.html
+
+**Décision :** Un `index.html` à la racine redirige vers `src/index.html` via meta-refresh + JS redirect. `.nojekyll` désactive le traitement Jekyll de GitHub Pages.
+
+**Raison :** GitHub Pages ne peut servir que depuis `/` ou `/docs`. La structure `src/` est conservée pour la clarté du projet. La redirection est transparente pour l'utilisateur.
+
+---
+
+## DEC-041 — 2026-05-18 — Level rename via window.prompt (pas d'inline editing)
+
+**Décision :** Le renommage d'un niveau se fait via `window.prompt()` au double-clic.
+
+**Raison :** YAGNI — un inline editor est plus complexe et non requis. Le prompt est suffisant pour Phase 10..

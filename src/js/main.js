@@ -20,6 +20,8 @@ import { initSelectTool } from './tools/select-tool.js';
 import { initInspector } from './ui/inspector.js';
 import { undo, redo, canUndo, canRedo } from './core/history.js';
 import { initExportPanel } from './ui/export-panel.js';
+import { initLevelPanel } from './ui/level-panel.js';
+import { initHelpPanel } from './ui/help-panel.js';
 
 function boot() {
   const canvas = document.getElementById('map-canvas');
@@ -32,8 +34,11 @@ function boot() {
   initElementPanel();
   initDecorPanel();
   initAreaPanel();
+  initLevelPanel();
   initExportPanel();
   initInspector();
+  const help = initHelpPanel();
+  document.getElementById('help-btn')?.addEventListener('click', help.show);
 
   // Register layer renderers before initRenderer starts the RAF loop
   initLayerRenderer();

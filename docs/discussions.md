@@ -188,6 +188,18 @@
 
 ---
 
+## DISC-014 — 2026-05-18 — PM → Marketing Agent / PM (Phase 10)
+
+**Participants :** PM, Marketing Agent
+
+**Résumé :** Marketing Agent produit README.md, LICENSE, met à jour index.html (title + meta). PM produit level-panel.js, help-panel.js, root index.html redirect, .nojekyll, styles CSS, câblage main.js.
+
+**Nom choisi :** Cartomancer. Tagline : "Draw your dungeon. One click at a time."
+
+**Décisions issues :** DEC-039 à DEC-041
+
+---
+
 ## Template pour les discussions internes (agents)
 
 ```

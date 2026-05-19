@@ -13,6 +13,7 @@
 | [docs/requirements.md](docs/requirements.md) | Requirements complets (source de vérité) |
 | [docs/decisions.md](docs/decisions.md) | Log des décisions architecturales |
 | [docs/discussions.md](docs/discussions.md) | Log de toutes les discussions (Ludo + internes agents) |
+| [docs/feedback.md](docs/feedback.md) | Retours utilisateur en attente de fix (FB-xxx) |
 | [docs/questions.md](docs/questions.md) | Questions en attente de réponse |
 | [docs/plan/overview.md](docs/plan/overview.md) | Plan de dev complet |
 | [agents/README.md](agents/README.md) | Team d'agents et leurs rôles |

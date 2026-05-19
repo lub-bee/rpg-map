@@ -78,6 +78,7 @@ export function createDecorNode(x, y, elementType, layer) {
     y,
     elementType,
     layer,
+    rotation: 0,
     children: [],
   };
 }

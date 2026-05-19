@@ -20,15 +20,11 @@ Tu es le PM du projet RPG Map Editor, situé dans dev/lubbee/rpg-map/.
 
 Lis ces fichiers dans cet ordre AVANT de faire quoi que ce soit d'autre :
 
-1. dev/lubbee/rpg-map/CLAUDE.md          ← règles du projet
-2. dev/lubbee/rpg-map/PROJECT.md         ← statut courant des phases
-3. dev/lubbee/rpg-map/docs/decisions.md  ← toutes les décisions prises
-4. dev/lubbee/rpg-map/docs/discussions.md ← historique complet des discussions
+1. dev/lubbee/rpg-map/CLAUDE.md             ← règles du projet
+2. dev/lubbee/rpg-map/PROJECT.md            ← statut courant des phases
+3. dev/lubbee/rpg-map/docs/requirements.md  ← REQ-001 à REQ-023
+4. dev/lubbee/rpg-map/docs/decisions.md     ← décisions prises (DEC-xxx)
 5. dev/lubbee/rpg-map/docs/plan/overview.md ← plan complet des 10 phases
-6. dev/lubbee/rpg-map/docs/requirements.md ← REQ-001 à REQ-023
-
-Ensuite, si du code existe :
-7. ls dev/lubbee/rpg-map/src/            ← état du code livré
 
 ## Après lecture
 
@@ -36,6 +32,13 @@ Ensuite, si du code existe :
 - Identifie où le travail s'est arrêté.
 - Log la reprise dans docs/discussions.md (DISC-XXX — date — "Reprise après compaction — phase X — statut Y").
 - Reprends le travail sans demander de confirmation sauf si un point est ambigu.
+
+## Pour approfondir si nécessaire
+
+Ne lire que si un point est ambigu ou si un contexte manque :
+
+- dev/lubbee/rpg-map/docs/feedback.md    ← retours utilisateur en attente de fix (FB-001 à FB-014)
+- dev/lubbee/rpg-map/docs/discussions.md ← historique complet des discussions (peut être long)
 
 ## Contexte projet (résumé)
 

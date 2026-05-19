@@ -1,5 +1,5 @@
 import { dispatch } from '../core/state.js';
-import { setDecorSelection } from '../tools/decor-tool.js';
+import { setDecorSelection, setSnapToGrid } from '../tools/decor-tool.js';
 import { PRESETS } from '../data/presets.js';
 import { LAYER } from '../data/schema.js';
 
@@ -62,6 +62,26 @@ export function initDecorPanel() {
     groupList.appendChild(li);
   }
   section.appendChild(groupList);
+
+  // Toggle snap to grid
+  const snapRow = document.createElement('div');
+  snapRow.className = 'panel-snap-row';
+
+  const snapCheckbox = document.createElement('input');
+  snapCheckbox.type = 'checkbox';
+  snapCheckbox.id = 'decor-snap-checkbox';
+  snapCheckbox.checked = true;
+  snapCheckbox.addEventListener('change', () => {
+    setSnapToGrid(snapCheckbox.checked);
+  });
+
+  const snapLabel = document.createElement('label');
+  snapLabel.htmlFor = 'decor-snap-checkbox';
+  snapLabel.textContent = 'Snap to grid';
+
+  snapRow.appendChild(snapCheckbox);
+  snapRow.appendChild(snapLabel);
+  section.appendChild(snapRow);
 
   const panelLeft = document.getElementById('panel-left');
   const areaPanel = document.getElementById('area-panel');

@@ -362,11 +362,46 @@ kbd {
   color: #e0e0e0;
 }
 
+/* ===== Context menu ===== */
+#context-menu {
+  position: fixed;
+  z-index: 2000;
+  background: #16213e;
+  border: 1px solid #1a3a5c;
+  border-radius: 4px;
+  padding: 4px 0;
+  min-width: 120px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.context-menu-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  color: #e0e0e0;
+  font-size: 13px;
+  padding: 6px 14px;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background 0.1s;
+}
+
+.context-menu-item:hover {
+  background: #1a3a5c;
+}
+
+.context-menu-item.danger:hover {
+  background: #e94560;
+  color: #fff;
+}
+
 /* ===== Statusbar ===== */
 #statusbar {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 8px;
   height: 28px;
   padding: 0 12px;
   background: #16213e;
@@ -374,4 +409,218 @@ kbd {
   font-family: 'Courier New', Courier, monospace;
   font-size: 11px;
   color: #8892b0;
+}
+
+.statusbar-sep {
+  color: #2a4a7a;
+  user-select: none;
+}
+
+.statusbar-label {
+  color: #8892b0;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+#zoom-input {
+  width: 52px;
+  background: #0d1f3c;
+  border: 1px solid #1a3a5c;
+  color: #ccd6f6;
+  font-size: 11px;
+  font-family: 'Courier New', Courier, monospace;
+  padding: 1px 4px;
+  border-radius: 3px;
+  text-align: center;
+}
+
+#zoom-input:focus {
+  outline: 1px solid #e94560;
+}
+
+#statusbar button {
+  background: #0f3460;
+  color: #8892b0;
+  border: 1px solid #1a3a5c;
+  border-radius: 3px;
+  padding: 1px 7px;
+  cursor: pointer;
+  font-size: 11px;
+  font-family: 'Courier New', Courier, monospace;
+  transition: background 0.15s;
+  height: 20px;
+}
+
+#statusbar button:hover {
+  background: #e94560;
+  color: #fff;
+}
+
+#grid-size-input {
+  width: 80px;
+  accent-color: #e94560;
+  cursor: pointer;
+}
+
+#grid-size-value {
+  min-width: 32px;
+  color: #ccd6f6;
+  font-size: 11px;
+}
+
+/* ===== Area panel ===== */
+.area-create-btn {
+  display: block;
+  width: calc(100% - 24px);
+  margin: 6px 12px 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+.area-form {
+  padding: 4px 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.area-form.hidden {
+  display: none;
+}
+
+.area-form-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.area-name-input {
+  flex: 1;
+  background: #0d1f3c;
+  border: 1px solid #1a3a5c;
+  color: #ccd6f6;
+  font-size: 12px;
+  padding: 3px 6px;
+  border-radius: 3px;
+  min-width: 0;
+}
+
+.area-name-input:focus {
+  outline: 1px solid #e94560;
+}
+
+.area-color-input {
+  width: 32px;
+  height: 24px;
+  padding: 1px 2px;
+  border: 1px solid #1a3a5c;
+  border-radius: 3px;
+  background: #0d1f3c;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.area-form-actions {
+  justify-content: flex-end;
+}
+
+.area-form-error {
+  flex: 1;
+  font-size: 11px;
+  color: #e94560;
+}
+
+.area-confirm-btn,
+.area-cancel-btn {
+  padding: 3px 10px;
+  font-size: 12px;
+}
+
+/* ===== Area list items ===== */
+.area-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+}
+
+.area-item:hover {
+  background: #1a3a5c;
+}
+
+.area-swatch-wrap {
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.area-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1px solid rgba(255,255,255,0.2);
+  flex-shrink: 0;
+}
+
+.area-swatch-wrap:hover .area-swatch {
+  border-color: #e94560;
+}
+
+.area-swatch-picker {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  padding: 0;
+  border: none;
+}
+
+.area-label {
+  flex: 1;
+  font-size: 13px;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.area-label:hover {
+  color: #e0e0e0;
+  text-decoration: underline;
+}
+
+.area-rename-input {
+  flex: 1;
+  background: #0d1f3c;
+  border: 1px solid #e94560;
+  color: #ccd6f6;
+  font-size: 13px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  min-width: 0;
+}
+
+.area-delete {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: #8892b0;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0 2px;
+  line-height: 1;
+}
+
+.area-delete:hover {
+  color: #e94560;
+  background: none;
+}
+
+.hidden {
+  display: none !important;
 }

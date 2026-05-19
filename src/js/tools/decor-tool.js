@@ -2,15 +2,29 @@ import { getState } from '../core/state.js';
 import { execute } from '../core/history.js';
 import { getCamera, addLayerRenderer } from '../canvas/renderer.js';
 import { snapScreenToGrid } from '../canvas/snap.js';
-import { worldToScreen } from '../canvas/coords.js';
+import { screenToWorld, worldToScreen } from '../canvas/coords.js';
 import { createDecorNode, LAYER } from '../data/schema.js';
 import { PRESETS } from '../data/presets.js';
 
 let _selectedPreset = null;
 let _ghostPos = null;
+let _snapToGrid = true;
 
 export function setDecorSelection(preset) {
   _selectedPreset = preset;
+}
+
+export function setSnapToGrid(enabled) {
+  _snapToGrid = enabled;
+}
+
+function resolveWorldPos(sx, sy, camera, gridSize) {
+  if (_snapToGrid) {
+    const { wx, wy } = snapScreenToGrid(sx, sy, camera, gridSize);
+    return { wx, wy };
+  }
+  const { x: wx, y: wy } = screenToWorld(sx, sy, camera);
+  return { wx, wy };
 }
 
 function placeNode(node) {
@@ -40,7 +54,7 @@ function onClick(e) {
   const sx = e.clientX - rect.left;
   const sy = e.clientY - rect.top;
   const camera = getCamera();
-  const { wx, wy } = snapScreenToGrid(sx, sy, camera, state.ui.gridSize);
+  const { wx, wy } = resolveWorldPos(sx, sy, camera, state.ui.gridSize);
 
   if (_selectedPreset.type === 'single') {
     const node = createDecorNode(wx, wy, _selectedPreset.elementType, _selectedPreset.layer ?? state.ui.activeLayer);
@@ -78,7 +92,7 @@ function onMouseMove(e) {
   const sx = e.clientX - rect.left;
   const sy = e.clientY - rect.top;
   const camera = getCamera();
-  const { wx, wy } = snapScreenToGrid(sx, sy, camera, state.ui.gridSize);
+  const { wx, wy } = resolveWorldPos(sx, sy, camera, state.ui.gridSize);
   _ghostPos = { wx, wy };
 }
 

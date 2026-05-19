@@ -14,13 +14,18 @@ function getSelectedWall() {
   const id = state.ui.selectedIds[0];
   if (!id) return null;
   const level = state.map.levels[state.ui.activeLevelIndex];
-  return level.walls.find(w => w.id === id) ?? null;
+  // Direct match: user clicked on the wall segment
+  const direct = level.walls.find(w => w.id === id);
+  if (direct) return direct;
+  // Fallback: user clicked on a node — return the first wall that uses this node
+  return level.walls.find(w => w.from === id || w.to === id) ?? null;
 }
 
 export function initElementPanel() {
   const list = document.querySelector('#element-panel ul.panel-list');
   if (!list) return;
 
+  const hint = document.querySelector('#element-panel-hint');
   const items = [];
 
   for (const type of Object.values(ELEMENT_TYPE)) {
@@ -45,6 +50,7 @@ export function initElementPanel() {
 
   function updateState() {
     const hasWall = getSelectedWall() !== null;
+    if (hint) hint.hidden = hasWall;
     for (const li of items) {
       li.classList.toggle('disabled', !hasWall);
     }

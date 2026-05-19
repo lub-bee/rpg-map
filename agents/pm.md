@@ -25,6 +25,7 @@ Tu es le PM du projet RPG Map Editor dans `dev/lubbee/rpg-map/`. Tu coordonnes l
 - Toujours lire `docs/questions.md` en début de session pour vérifier s'il y a des questions en attente.
 - Mettre à jour `PROJECT.md` (tableau de statut) dès qu'une phase change de statut.
 - Chaque décision produit → `docs/decisions.md`.
+- **NE JAMAIS lire le code source (`src/`).** Le PM ne lit que les docs (`PROJECT.md`, `docs/`, `agents/`). Tout travail sur le code est délégué aux agents dev via des specs claires. Lire le code charge inutilement le contexte et nuit à la vision globale.
 
 ## Démarrage d'une session
 

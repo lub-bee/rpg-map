@@ -6,7 +6,7 @@ import { screenToWorld, worldToGridCoords } from './coords.js';
 import { DISPLAY_MODE } from '../data/schema.js';
 import { updateCoords } from '../ui/statusbar.js';
 
-let canvas, ctx, camera, detachControls, rafId;
+let canvas, ctx, camera, cameraControls, rafId;
 
 // Entity render hooks — populated by later phases via addLayerRenderer()
 const _layerRenderers = [];
@@ -19,7 +19,7 @@ export function init(canvasEl) {
   resizeCanvas();
   window.addEventListener('resize', onResize);
 
-  detachControls = attachCameraControls(canvas, (newCamera) => {
+  cameraControls = attachCameraControls(canvas, (newCamera) => {
     camera = newCamera;
     emit('camera:change', camera);
   });
@@ -38,11 +38,18 @@ export function getCamera() {
   return camera;
 }
 
+/**
+ * Programmatically set the camera (used by statusbar controls).
+ */
+export function setCamera(newCamera) {
+  cameraControls.setCamera(newCamera);
+}
+
 export function destroy() {
   cancelAnimationFrame(rafId);
   window.removeEventListener('resize', onResize);
   canvas.removeEventListener('mousemove', onMouseMove);
-  detachControls?.();
+  cameraControls?.detach();
 }
 
 function loop() {

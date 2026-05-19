@@ -124,6 +124,14 @@ function onClick(e) {
   _chain.push(newNode.id);
 }
 
+function onContextMenu(e) {
+  e.preventDefault();
+  if (getState().ui.activeTool !== 'wall') return;
+  _chain = [];
+  _ghostPos = null;
+  dispatch({ type: 'SET_TOOL', payload: null });
+}
+
 function onKeyDown(e) {
   if (e.key === 'Escape' && getState().ui.activeTool === 'wall') {
     _chain = [];
@@ -174,12 +182,14 @@ export function initWallTool(canvas) {
   canvas.addEventListener('click', onClick);
   canvas.addEventListener('mousemove', onMouseMove);
   canvas.addEventListener('mouseleave', onMouseLeave);
+  canvas.addEventListener('contextmenu', onContextMenu);
   document.addEventListener('keydown', onKeyDown);
 
   return function detach() {
     canvas.removeEventListener('click', onClick);
     canvas.removeEventListener('mousemove', onMouseMove);
     canvas.removeEventListener('mouseleave', onMouseLeave);
+    canvas.removeEventListener('contextmenu', onContextMenu);
     document.removeEventListener('keydown', onKeyDown);
   };
 }

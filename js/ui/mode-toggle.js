@@ -3,27 +3,48 @@ import { emit } from '../core/events.js';
 import { DISPLAY_MODE } from '../data/schema.js';
 
 export function initModeToggle() {
-  const buttons = document.querySelectorAll('.mode-btn');
+  const app = document.getElementById('app');
+  const previewToggleBtn = document.getElementById('preview-toggle');
+  const previewExitBtn   = document.getElementById('preview-exit');
 
-  function setActive(mode) {
-    for (const btn of buttons) {
-      btn.classList.toggle('active', btn.dataset.mode === mode);
+  function setPreview(on) {
+    app.setAttribute('data-preview', on ? 'true' : 'false');
+
+    // Update icône du bouton preview-toggle
+    const icon = previewToggleBtn?.querySelector('i');
+    if (icon) {
+      icon.setAttribute('data-lucide', on ? 'eye-off' : 'eye');
+      if (window.lucide) lucide.createIcons({ nodes: [previewToggleBtn] });
     }
+
+    // Dispatch pour synchroniser l'état interne
+    const mode = on ? DISPLAY_MODE.PREVIEW : DISPLAY_MODE.EDIT;
+    dispatch({ type: 'SET_MODE', payload: mode });
   }
 
-  for (const btn of buttons) {
-    btn.addEventListener('click', () => {
-      dispatch({ type: 'SET_MODE', payload: btn.dataset.mode });
+  if (previewToggleBtn) {
+    previewToggleBtn.addEventListener('click', () => {
+      const isPreview = app.getAttribute('data-preview') === 'true';
+      setPreview(!isPreview);
     });
   }
 
+  if (previewExitBtn) {
+    previewExitBtn.addEventListener('click', () => setPreview(false));
+  }
+
+  // Tab → toggle preview, Escape → exit preview
   document.addEventListener('keydown', (e) => {
-    if (e.key !== 'Tab') return;
+    if (e.key !== 'Tab' && e.key !== 'Escape') return;
     if (e.target.closest('input, textarea, select')) return;
-    e.preventDefault();
-    const current = getState().ui.mode;
-    const next = current === DISPLAY_MODE.EDIT ? DISPLAY_MODE.PREVIEW : DISPLAY_MODE.EDIT;
-    dispatch({ type: 'SET_MODE', payload: next });
+
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const isPreview = app.getAttribute('data-preview') === 'true';
+      setPreview(!isPreview);
+    } else if (e.key === 'Escape') {
+      setPreview(false);
+    }
   });
 
   let _prevMode = getState().ui.mode;
@@ -31,10 +52,10 @@ export function initModeToggle() {
   subscribe((state) => {
     if (state.ui.mode !== _prevMode) {
       _prevMode = state.ui.mode;
-      setActive(state.ui.mode);
       emit('mode:changed', state.ui.mode);
+      // Sync data-preview en cas de changement d'état externe
+      const on = state.ui.mode === DISPLAY_MODE.PREVIEW;
+      app.setAttribute('data-preview', on ? 'true' : 'false');
     }
   });
-
-  setActive(getState().ui.mode);
 }

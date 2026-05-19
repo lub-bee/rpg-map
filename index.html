@@ -1,92 +1,389 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cartomancer — Draw your dungeon. One click at a time.</title>
-  <meta name="description" content="Cartomancer: a browser-based RPG map editor. Draw walls, place decor, export to JSON, SVG or PNG. No install, no account.">
-  <link rel="stylesheet" href="css/main.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cartomancer</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/main.css" />
 </head>
+
 <body>
-  <div id="app">
+  <!--
+    =====================================================================
+    Cartomancer  —  HTML chrome
+    =====================================================================
+    HOOKS exposed for the JS layer. Rename to match your real handlers
+    if needed — every interactive element is documented here.
 
-    <div id="toolbar">
-      <div id="tool-group">
-        <button data-tool="wall">Wall</button>
-        <button data-tool="arc">Arc</button>
-        <button data-tool="select">Select</button>
-        <button data-tool="decor">Decor</button>
-        <button data-tool="area">Area</button>
-        <button data-tool="separator">Separator</button>
+      Toolbar tools (data-tool):   wall | arc | select | decor | area | separator
+      Action buttons (id):         save-json, load-json, export-svg, export-png,
+                                   help, preview-toggle
+      Panel collapse (id):         collapse-left, collapse-right
+      Left tabs (data-tab):        layers | levels | areas
+      Left tab content
+        (data-tab-content):        layers | levels | areas
+      Inspector contexts
+        (data-inspector):          empty | node | wall | decor | area
+      Inspector inputs (id):       node-x, node-y, decor-rotation,
+                                   area-name, area-color
+      Statusbar (id):              status-tool, status-x, status-y,
+                                   zoom, zoom-reset, grid-size
+      Root (id):                   app — toggle [data-preview="true|false"]
+                                   map-canvas — the <canvas> the editor draws on
+    =====================================================================
+  -->
+
+  <div class="app" id="app" data-preview="false">
+
+    <!-- =================================================================
+         TOOLBAR (vertical, left)
+         ================================================================= -->
+    <aside class="toolbar" role="toolbar" aria-label="Tools">
+
+      <div class="brand" aria-hidden="true">C</div>
+
+      <div class="toolbar-divider"></div>
+
+      <!-- Drawing tools -->
+      <button class="tool-btn" data-tool="wall" data-active="true" aria-label="Wall">
+        <i data-lucide="brick-wall"></i>
+        <span class="tooltip">Wall <kbd>W</kbd></span>
+      </button>
+      <button class="tool-btn" data-tool="arc" aria-label="Arc">
+        <i data-lucide="spline"></i>
+        <span class="tooltip">Arc <kbd>A</kbd></span>
+      </button>
+      <button class="tool-btn" data-tool="select" aria-label="Select">
+        <i data-lucide="mouse-pointer-2"></i>
+        <span class="tooltip">Select <kbd>S</kbd></span>
+      </button>
+      <button class="tool-btn" data-tool="decor" aria-label="Decor">
+        <i data-lucide="shapes"></i>
+        <span class="tooltip">Decor <kbd>D</kbd></span>
+      </button>
+      <button class="tool-btn" data-tool="area" aria-label="Area">
+        <i data-lucide="lasso-select"></i>
+        <span class="tooltip">Area <kbd>E</kbd></span>
+      </button>
+      <button class="tool-btn" data-tool="separator" aria-label="Separator">
+        <i data-lucide="separator-horizontal"></i>
+        <span class="tooltip">Separator <kbd>R</kbd></span>
+      </button>
+
+      <div class="toolbar-divider"></div>
+
+      <!-- File actions -->
+      <button class="tool-btn" id="save-json" aria-label="Save JSON">
+        <i data-lucide="save"></i>
+        <span class="tooltip">Save JSON <kbd>⌘ S</kbd></span>
+      </button>
+      <button class="tool-btn" id="load-json" aria-label="Load JSON">
+        <i data-lucide="folder-open"></i>
+        <span class="tooltip">Load JSON <kbd>⌘ O</kbd></span>
+      </button>
+
+      <div class="toolbar-divider"></div>
+
+      <!-- Exports -->
+      <button class="tool-btn" id="export-svg" aria-label="Export SVG">
+        <i data-lucide="file-code-2"></i>
+        <span class="tooltip">Export SVG</span>
+      </button>
+      <button class="tool-btn" id="export-png" aria-label="Export PNG">
+        <i data-lucide="file-image"></i>
+        <span class="tooltip">Export PNG</span>
+      </button>
+
+      <div class="toolbar-spacer"></div>
+
+      <!-- Preview + help (bottom-anchored) -->
+      <button class="tool-btn" id="preview-toggle" aria-label="Toggle preview">
+        <i data-lucide="eye"></i>
+        <span class="tooltip">Preview <kbd>Tab</kbd></span>
+      </button>
+      <button class="tool-btn" id="help" aria-label="Help">
+        <i data-lucide="circle-help"></i>
+        <span class="tooltip">Help <kbd>?</kbd></span>
+      </button>
+    </aside>
+
+    <!-- =================================================================
+         LEFT PANEL  —  Layers / Levels / Areas (tabs)
+         ================================================================= -->
+    <aside class="panel panel-left" id="panel-left" data-collapsed="false" aria-label="Layers panel">
+
+      <div class="panel-tabs" role="tablist">
+        <button class="panel-tab" data-tab="layers" data-active="true" role="tab" aria-selected="true">
+          <i data-lucide="layers"></i>
+          <span class="panel-tab-label">Layers</span>
+        </button>
+        <button class="panel-tab" data-tab="levels" role="tab">
+          <i data-lucide="layers-2"></i>
+          <span class="panel-tab-label">Levels</span>
+        </button>
+        <button class="panel-tab" data-tab="areas" role="tab">
+          <i data-lucide="square-dashed"></i>
+          <span class="panel-tab-label">Areas</span>
+        </button>
+        <div class="panel-tab-collapse">
+          <button class="panel-collapse" id="collapse-left" aria-label="Collapse left panel">
+            <i data-lucide="chevron-left"></i>
+          </button>
+        </div>
       </div>
-      <div id="mode-toggle">
-        <button class="mode-btn active" data-mode="edit">Edit</button>
-        <button class="mode-btn" data-mode="preview">Preview</button>
+
+      <div class="panel-body">
+
+        <!-- LAYERS TAB -->
+        <div class="tab-panel" data-tab-content="layers" data-active="true">
+          <div class="section-header">
+            <span class="section-title">Layers</span>
+            <button class="icon-btn" id="add-layer-btn" aria-label="Add layer">
+              <i data-lucide="plus"></i>
+            </button>
+          </div>
+          <div class="list" id="layer-list"></div>
+        </div>
+
+        <!-- LEVELS TAB -->
+        <div class="tab-panel" data-tab-content="levels">
+          <div class="section-header">
+            <span class="section-title">Levels</span>
+            <button class="icon-btn" id="add-level-btn" aria-label="Add level">
+              <i data-lucide="plus"></i>
+            </button>
+          </div>
+          <div class="list" id="level-list"></div>
+        </div>
+
+        <!-- AREAS TAB -->
+        <div class="tab-panel" data-tab-content="areas">
+          <div class="section-header">
+            <span class="section-title">Areas</span>
+            <button class="icon-btn" id="add-area-btn" aria-label="Add area">
+              <i data-lucide="plus"></i>
+            </button>
+          </div>
+          <div class="list" id="area-list"></div>
+        </div>
+
       </div>
-      <div id="export-group">
-        <button data-action="save-json">Save JSON</button>
-        <button data-action="load-json">Load JSON</button>
-        <button data-action="export-svg">Export SVG</button>
-        <button data-action="export-png">Export PNG</button>
-        <button id="help-btn" title="Keyboard shortcuts (?)">?</button>
-      </div>
-    </div>
+    </aside>
 
-    <div id="workspace">
+    <!-- =================================================================
+         CANVAS
+         ================================================================= -->
+    <main class="canvas-wrap">
+      <canvas id="map-canvas"></canvas>
 
-      <div id="panel-left">
-        <section id="layer-panel">
-          <div class="panel-title">Layers</div>
-          <ul class="panel-list"></ul>
-        </section>
-        <section id="level-panel">
-          <div class="panel-title">Levels</div>
-          <ul class="panel-list"></ul>
-        </section>
-        <section id="area-panel">
-          <div class="panel-title">Areas</div>
-          <ul class="panel-list"></ul>
-        </section>
-      </div>
+      <!-- Floating exit-preview button (only visible when [data-preview="true"]) -->
+      <button class="preview-exit" id="preview-exit" aria-label="Exit preview">
+        <i data-lucide="x"></i>
+        <span>Exit preview</span>
+        <kbd>Tab</kbd>
+      </button>
+    </main>
 
-      <div id="canvas-container">
-        <canvas id="map-canvas"></canvas>
-      </div>
+    <!-- =================================================================
+         RIGHT PANEL  —  Inspector (contextual)
+         ================================================================= -->
+    <aside class="panel panel-right" id="panel-right" data-collapsed="false" aria-label="Inspector">
 
-      <div id="panel-right">
-        <section id="inspector">
-          <div class="panel-title">Inspector</div>
-          <p class="panel-placeholder">Select an entity</p>
-        </section>
-        <section id="texture-panel">
-          <div class="panel-title">Texture</div>
-          <div class="swatches"></div>
-        </section>
-        <section id="element-panel">
-          <div class="panel-title">Wall Elements</div>
-          <p id="element-panel-hint" class="panel-placeholder">Select a wall to add elements (door, window, opening…)</p>
-          <ul class="panel-list"></ul>
-        </section>
+      <div class="panel-header">
+        <button class="panel-collapse" id="collapse-right" aria-label="Collapse right panel">
+          <i data-lucide="chevron-right"></i>
+        </button>
+        <span class="panel-header-title">Inspector</span>
+        <span class="panel-header-context-badge" id="inspector-badge" style="display:none">Wall</span>
       </div>
 
-    </div>
+      <div class="panel-body">
 
-    <div id="statusbar">
-      <span id="coords">x: 0, y: 0</span>
-      <span class="statusbar-sep">|</span>
-      <label class="statusbar-label" for="zoom-input">Zoom</label>
-      <input id="zoom-input" type="text" value="100%" title="Zoom (ex: 150%)">
-      <button id="zoom-reset" title="Reset zoom to 100%">Reset</button>
-      <button id="fit-btn" title="Fit view to map content">Fit</button>
-      <span class="statusbar-sep">|</span>
-      <label class="statusbar-label" for="grid-size-input">Grid</label>
-      <input id="grid-size-input" type="range" min="16" max="128" step="8" value="64" title="Grid size">
-      <span id="grid-size-value">64px</span>
-      <span class="statusbar-sep">|</span>
-      <span id="active-tool">No tool</span>
-    </div>
+        <!-- EMPTY -->
+        <div class="inspector-context" data-inspector="empty" data-active="true">
+          <div class="inspector-empty">
+            <div class="inspector-empty-icon"><i data-lucide="mouse-pointer-2"></i></div>
+            <div class="inspector-empty-title">Nothing selected</div>
+            <div class="inspector-empty-hint">Pick a tool or click an object<br>on the canvas to inspect it.</div>
+          </div>
+        </div>
+
+        <!-- NODE -->
+        <div class="inspector-context" data-inspector="node">
+          <div class="inspector-section">
+            <div class="inspector-section-title">Position</div>
+            <div class="field">
+              <span class="field-label">X</span>
+              <span class="field-value-readonly mono" id="node-x">—</span>
+            </div>
+            <div class="field">
+              <span class="field-label">Y</span>
+              <span class="field-value-readonly mono" id="node-y">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- WALL -->
+        <div class="inspector-context" data-inspector="wall">
+
+          <div class="inspector-section">
+            <div class="inspector-section-title">Texture</div>
+            <div class="swatch-grid" id="texture-swatches">
+              <button class="swatch" data-texture="stone" data-active="true" style="background:#6b6b6b" aria-label="Stone">
+                <span class="swatch-label">stone</span>
+              </button>
+              <button class="swatch" data-texture="brick" style="background:linear-gradient(135deg,#9a4f3a 0%,#6e3a2a 100%)" aria-label="Brick">
+                <span class="swatch-label">brick</span>
+              </button>
+              <button class="swatch" data-texture="wood" style="background:linear-gradient(180deg,#a87440 0%,#6b4a28 100%)" aria-label="Wood">
+                <span class="swatch-label">wood</span>
+              </button>
+              <button class="swatch" data-texture="dirt" style="background:#5d4a36" aria-label="Dirt">
+                <span class="swatch-label">dirt</span>
+              </button>
+              <button class="swatch" data-texture="marble" style="background:linear-gradient(135deg,#d6d0bd 0%,#a8a18a 100%)" aria-label="Marble">
+                <span class="swatch-label" style="color:#2a2a2a;text-shadow:none">marble</span>
+              </button>
+              <button class="swatch" data-texture="cobble" style="background:#7a766c" aria-label="Cobble">
+                <span class="swatch-label">cobble</span>
+              </button>
+              <button class="swatch" data-texture="metal" style="background:linear-gradient(180deg,#525868 0%,#3a3e4c 100%)" aria-label="Metal">
+                <span class="swatch-label">metal</span>
+              </button>
+              <button class="swatch" data-texture="void" style="background:#1a1a2e;border-color:rgba(255,255,255,0.18)" aria-label="Void">
+                <span class="swatch-label">void</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="inspector-section">
+            <div class="inspector-section-title">Wall Elements</div>
+            <div class="element-grid" id="element-btns">
+              <button class="element-btn" data-element="door">
+                <i data-lucide="door-open"></i>
+                <span class="element-btn-label">Door</span>
+              </button>
+              <button class="element-btn" data-element="window">
+                <i data-lucide="rectangle-horizontal"></i>
+                <span class="element-btn-label">Window</span>
+              </button>
+              <button class="element-btn" data-element="opening">
+                <i data-lucide="minus"></i>
+                <span class="element-btn-label">Opening</span>
+              </button>
+              <button class="element-btn" data-element="secret">
+                <i data-lucide="key-round"></i>
+                <span class="element-btn-label">Secret</span>
+              </button>
+              <button class="element-btn" data-element="carpet" style="grid-column: 1 / -1">
+                <i data-lucide="square"></i>
+                <span class="element-btn-label">Carpet</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DECOR -->
+        <div class="inspector-context" data-inspector="decor">
+          <div class="inspector-section">
+            <div class="inspector-section-title">Decor Node</div>
+            <div class="field">
+              <span class="field-label">Type</span>
+              <span class="field-value-readonly" id="decor-type">—</span>
+            </div>
+            <div class="field">
+              <span class="field-label">Rotation</span>
+              <div style="display:flex;align-items:center;gap:6px">
+                <input type="number" class="input mono" id="decor-rotation" value="0" min="0" max="360" step="15" />
+                <span class="status-suffix">°</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AREA -->
+        <div class="inspector-context" data-inspector="area">
+          <div class="inspector-section">
+            <div class="inspector-section-title">Area</div>
+            <div class="field" style="grid-template-columns: 64px 1fr">
+              <span class="field-label">Name</span>
+              <input type="text" class="input" id="area-name" value="" />
+            </div>
+          </div>
+          <div class="inspector-section">
+            <div class="inspector-section-title">Color</div>
+            <div class="color-palette" id="area-color">
+              <button class="color-dot" style="background:#e94560"></button>
+              <button class="color-dot" style="background:#c97a3a"></button>
+              <button class="color-dot" style="background:#d6b03a"></button>
+              <button class="color-dot" style="background:#5dc97a"></button>
+              <button class="color-dot" style="background:#3a7d8b"></button>
+              <button class="color-dot" style="background:#3a5d8b"></button>
+              <button class="color-dot" style="background:#7a5dc9"></button>
+              <button class="color-dot" style="background:#c95d8a"></button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- =================================================================
+         STATUSBAR
+         ================================================================= -->
+    <footer class="statusbar">
+      <div class="status-left">
+        <div class="status-tool" id="status-tool">
+          <i data-lucide="brick-wall"></i>
+          <span>Wall</span>
+        </div>
+      </div>
+
+      <div class="status-right">
+        <div class="status-item">
+          <span class="status-label">X</span>
+          <span class="status-value" id="status-x">0</span>
+          <span class="status-label" style="margin-left:4px">Y</span>
+          <span class="status-value" id="status-y">0</span>
+        </div>
+
+        <div class="status-divider"></div>
+
+        <div class="status-item">
+          <span class="status-label">Zoom</span>
+          <input type="number" class="status-input" id="zoom" value="100" min="10" max="800" step="10" />
+          <span class="status-suffix">%</span>
+          <button class="status-btn" id="zoom-lock" data-state="off" aria-label="Lock zoom" aria-pressed="false">
+            <i data-lucide="unlock"></i>
+          </button>
+          <button class="status-btn" id="zoom-reset" aria-label="Reset zoom">
+            <i data-lucide="rotate-ccw"></i>
+          </button>
+        </div>
+
+        <div class="status-divider"></div>
+
+        <div class="status-item">
+          <span class="status-label">Grid</span>
+          <input type="number" class="status-input" id="grid-size" value="64" min="4" max="256" step="4" />
+          <span class="status-suffix">px</span>
+        </div>
+      </div>
+    </footer>
 
   </div>
+
+  <!-- =====================================================================
+       Lucide icons (CDN)  —  no UI framework, just icon rendering.
+       ===================================================================== -->
+  <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.js"></script>
 
   <script type="module" src="js/main.js"></script>
 </body>

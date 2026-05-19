@@ -1,9 +1,12 @@
 import { TEXTURE } from '../data/schema.js';
 import { getState, dispatch, subscribe } from '../core/state.js';
 import { emit, on } from '../core/events.js';
-import { getTextureColor } from '../canvas/textures.js';
 
-let _defaultTexture = TEXTURE.GRID;
+let _defaultTexture = TEXTURE.STONE;
+
+// Mapping texture value → swatch data-texture attribute (HTML side uses lowercase names)
+// Les swatches dans le HTML ont data-texture avec les noms du handoff.
+// On fait correspondre les valeurs TEXTURE du schema avec les aria-label/data-texture du HTML.
 
 function getSelectedWall() {
   const state = getState();
@@ -19,19 +22,15 @@ function getCurrentTexture() {
 }
 
 export function initTexturePanel() {
-  const container = document.querySelector('#texture-panel .swatches');
-  if (!container) return;
+  const grid = document.getElementById('texture-swatches');
+  if (!grid) return;
 
-  const textures = Object.values(TEXTURE);
+  // Les swatches sont déjà dans le HTML — on branche les événements
+  const swatches = grid.querySelectorAll('.swatch[data-texture]');
 
-  for (const texture of textures) {
-    const swatch = document.createElement('div');
-    swatch.className = 'swatch';
-    swatch.dataset.texture = texture;
-    swatch.title = texture;
-    swatch.style.backgroundColor = getTextureColor(texture);
-
+  for (const swatch of swatches) {
     swatch.addEventListener('click', () => {
+      const texture = swatch.dataset.texture;
       const wall = getSelectedWall();
       if (wall) {
         dispatch({ type: 'UPDATE_ENTITY', payload: { id: wall.id, texture } });
@@ -41,14 +40,16 @@ export function initTexturePanel() {
         updateHighlight();
       }
     });
-
-    container.appendChild(swatch);
   }
 
   function updateHighlight() {
     const active = getCurrentTexture();
-    for (const swatch of container.querySelectorAll('.swatch')) {
-      swatch.classList.toggle('active', swatch.dataset.texture === active);
+    for (const swatch of swatches) {
+      if (swatch.dataset.texture === active) {
+        swatch.setAttribute('data-active', 'true');
+      } else {
+        swatch.removeAttribute('data-active');
+      }
     }
   }
 

@@ -22,25 +22,33 @@ import { undo, redo, canUndo, canRedo } from './core/history.js';
 import { initExportPanel } from './ui/export-panel.js';
 import { initLevelPanel } from './ui/level-panel.js';
 import { initHelpPanel } from './ui/help-panel.js';
+import { initPanelTabs } from './ui/panel-tabs.js';
 
 function boot() {
   const canvas = document.getElementById('map-canvas');
 
+  // Initialiser les icônes Lucide dès le départ (HTML statique)
+  if (window.lucide) lucide.createIcons();
+
+  // ── UI ────────────────────────────────────────────────────────────────────
+  initPanelTabs();
   initStatusbar();
   initToolbar();
   initModeToggle();
   initLayerPanel();
+  initLevelPanel();
+  initAreaPanel();
   initTexturePanel();
   initElementPanel();
   initDecorPanel();
-  initAreaPanel();
-  initLevelPanel();
-  initExportPanel();
   initInspector();
-  const help = initHelpPanel();
-  document.getElementById('help-btn')?.addEventListener('click', help.show);
+  initExportPanel();
 
-  // Register layer renderers before initRenderer starts the RAF loop
+  // Help panel
+  const help = initHelpPanel();
+  document.getElementById('help')?.addEventListener('click', help.show);
+
+  // ── Canvas / renderers ────────────────────────────────────────────────────
   initLayerRenderer();
   initDecorRenderer();
   initAreaRenderer();
@@ -54,6 +62,7 @@ function boot() {
   initArcTool(canvas);
   initSelectTool(canvas);
 
+  // Undo / redo
   document.addEventListener('keydown', (e) => {
     if (e.target.closest('input, textarea, select')) return;
     if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
@@ -65,6 +74,9 @@ function boot() {
       if (canRedo()) redo();
     }
   });
+
+  // Ré-init Lucide après le boot complet (les panels injectent du HTML dynamique)
+  if (window.lucide) lucide.createIcons();
 }
 
 if (document.readyState === 'loading') {

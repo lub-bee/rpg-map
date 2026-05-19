@@ -3,37 +3,46 @@ import { emit } from '../core/events.js';
 import { LAYER } from '../data/schema.js';
 
 const LAYER_DEFS = [
-  { id: LAYER.FURNITURE, label: 'Furniture' },
-  { id: LAYER.WALLS,     label: 'Walls' },
-  { id: LAYER.FLOOR,     label: 'Floor' },
-  { id: LAYER.OPENINGS,  label: 'Openings' },
+  { id: LAYER.FURNITURE, label: 'Furniture', color: '#7a3f6e' },
+  { id: LAYER.WALLS,     label: 'Walls',     color: '#6b6b6b' },
+  { id: LAYER.FLOOR,     label: 'Floor',     color: '#5d4a36' },
+  { id: LAYER.OPENINGS,  label: 'Openings',  color: '#8a6037' },
 ];
 
 const _visible = new Set([LAYER.OPENINGS, LAYER.FLOOR, LAYER.WALLS, LAYER.FURNITURE]);
 
 export function initLayerPanel() {
-  const ul = document.querySelector('#layer-panel ul.panel-list');
-  if (!ul) return;
+  const list = document.getElementById('layer-list');
+  if (!list) return;
 
   for (const def of LAYER_DEFS) {
-    const li = document.createElement('li');
-    li.className = 'layer-item';
-    li.dataset.layer = def.id;
+    const row = document.createElement('div');
+    row.className = 'list-row';
+    row.dataset.layer = def.id;
 
-    const toggle = document.createElement('span');
-    toggle.className = 'layer-toggle';
-    toggle.textContent = '●';
-    toggle.title = 'Toggle visibility';
+    const swatch = document.createElement('span');
+    swatch.className = 'list-row-swatch';
+    swatch.style.background = def.color;
 
     const label = document.createElement('span');
-    label.className = 'layer-label';
+    label.className = 'list-row-label';
     label.textContent = def.label;
 
-    li.appendChild(toggle);
-    li.appendChild(label);
-    ul.appendChild(li);
+    const actions = document.createElement('div');
+    actions.className = 'list-row-actions';
 
-    toggle.addEventListener('click', (e) => {
+    const visBtn = document.createElement('button');
+    visBtn.className = 'list-row-toggle';
+    visBtn.setAttribute('aria-label', 'Visibility');
+    visBtn.innerHTML = '<i data-lucide="eye"></i>';
+
+    actions.appendChild(visBtn);
+    row.appendChild(swatch);
+    row.appendChild(label);
+    row.appendChild(actions);
+    list.appendChild(row);
+
+    visBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       const visible = _visible.has(def.id);
       if (visible) {
@@ -41,26 +50,33 @@ export function initLayerPanel() {
       } else {
         _visible.add(def.id);
       }
-      emit('layer:visibility-change', { layer: def.id, visible: !visible });
-      _render(ul);
+      const nowVisible = !visible;
+      visBtn.setAttribute('data-state', nowVisible ? '' : 'off');
+      visBtn.innerHTML = `<i data-lucide="${nowVisible ? 'eye' : 'eye-off'}"></i>`;
+      if (window.lucide) lucide.createIcons({ nodes: [visBtn] });
+      emit('layer:visibility-change', { layer: def.id, visible: nowVisible });
+      _render(list);
     });
 
-    li.addEventListener('click', () => {
+    row.addEventListener('click', () => {
       dispatch({ type: 'SET_LAYER', payload: def.id });
     });
   }
 
-  subscribe(() => _render(ul));
-  _render(ul);
+  if (window.lucide) lucide.createIcons({ nodes: [list] });
+
+  subscribe(() => _render(list));
+  _render(list);
 }
 
-function _render(ul) {
+function _render(list) {
   const { activeLayer } = getState().ui;
-  for (const li of ul.querySelectorAll('.layer-item')) {
-    const id = Number(li.dataset.layer);
-    li.classList.toggle('active', id === activeLayer);
-    li.classList.toggle('hidden', !_visible.has(id));
-    const toggle = li.querySelector('.layer-toggle');
-    toggle.textContent = _visible.has(id) ? '●' : '○';
+  for (const row of list.querySelectorAll('.list-row[data-layer]')) {
+    const id = Number(row.dataset.layer);
+    if (id === activeLayer) {
+      row.setAttribute('data-active', 'true');
+    } else {
+      row.removeAttribute('data-active');
+    }
   }
 }

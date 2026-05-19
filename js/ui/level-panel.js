@@ -2,42 +2,52 @@ import { getState, dispatch, subscribe } from '../core/state.js';
 import { createLevel } from '../data/schema.js';
 
 export function initLevelPanel() {
-  const section = document.getElementById('level-panel');
-  if (!section) return;
+  const list = document.getElementById('level-list');
+  if (!list) return;
 
-  const ul = section.querySelector('ul.panel-list');
+  const addBtn = document.getElementById('add-level-btn');
+  if (addBtn) {
+    addBtn.addEventListener('click', () => {
+      const idx = getState().map.levels.length;
+      const name = window.prompt('Level name:', `Level ${idx}`);
+      if (!name) return;
+      dispatch({ type: 'ADD_LEVEL', payload: createLevel(name) });
+      dispatch({ type: 'SET_LEVEL', payload: getState().map.levels.length - 1 });
+    });
+  }
 
-  const addBtn = document.createElement('button');
-  addBtn.className = 'level-add-btn';
-  addBtn.textContent = '+ Add Level';
-  section.appendChild(addBtn);
-
-  addBtn.addEventListener('click', () => {
-    const idx = getState().map.levels.length;
-    const name = window.prompt('Level name:', `Level ${idx}`);
-    if (!name) return;
-    dispatch({ type: 'ADD_LEVEL', payload: createLevel(name) });
-    dispatch({ type: 'SET_LEVEL', payload: getState().map.levels.length - 1 });
-  });
-
-  subscribe(() => _render(ul));
-  _render(ul);
+  subscribe(() => _render(list));
+  _render(list);
 }
 
-function _render(ul) {
+function _render(list) {
   const { map, ui } = getState();
-  ul.innerHTML = '';
+  list.innerHTML = '';
 
   map.levels.forEach((level, index) => {
-    const li = document.createElement('li');
-    li.className = 'level-item' + (index === ui.activeLevelIndex ? ' active' : '');
-    li.textContent = level.name;
+    const row = document.createElement('div');
+    row.className = 'list-row';
+    if (index === ui.activeLevelIndex) {
+      row.setAttribute('data-active', 'true');
+    }
 
-    li.addEventListener('click', () => {
+    const label = document.createElement('span');
+    label.className = 'list-row-label';
+    label.textContent = level.name;
+
+    const meta = document.createElement('span');
+    meta.className = 'list-row-meta';
+    meta.textContent = `L${index}`;
+
+    row.appendChild(label);
+    row.appendChild(meta);
+    list.appendChild(row);
+
+    row.addEventListener('click', () => {
       dispatch({ type: 'SET_LEVEL', payload: index });
     });
 
-    li.addEventListener('dblclick', (e) => {
+    row.addEventListener('dblclick', (e) => {
       e.stopPropagation();
       const name = window.prompt('Rename level:', level.name);
       if (!name) return;
@@ -45,7 +55,5 @@ function _render(ul) {
       updated.levels = updated.levels.map((l, i) => i === index ? { ...l, name } : l);
       dispatch({ type: 'SET_MAP', payload: updated });
     });
-
-    ul.appendChild(li);
   });
 }

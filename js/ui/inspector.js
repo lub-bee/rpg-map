@@ -129,6 +129,14 @@ function renderDecorNode(container, entity) {
     dispatch({ type: 'UPDATE_ENTITY', payload: { id: entity.id, layer: Number(v) } });
   });
   container.appendChild(makeRow('Layer', layerSel));
+
+  const rotInput = makeNumberInput(entity.rotation ?? 0, v => {
+    dispatch({ type: 'UPDATE_ENTITY', payload: { id: entity.id, rotation: v } });
+  });
+  rotInput.step = '15';
+  rotInput.min = '-360';
+  rotInput.max = '360';
+  container.appendChild(makeRow('Rotation (°)', rotInput));
 }
 
 function renderArea(container, entity) {

@@ -1,4 +1,4 @@
-import { getState } from '../core/state.js';
+import { getState, dispatch } from '../core/state.js';
 import { execute } from '../core/history.js';
 import { addLayerRenderer, getCamera } from '../canvas/renderer.js';
 import { snapScreenToGrid } from '../canvas/snap.js';
@@ -136,6 +136,16 @@ function onClick(e) {
   }
 }
 
+function onContextMenu(e) {
+  e.preventDefault();
+  if (getState().ui.activeTool !== 'arc') return;
+  _step = 0;
+  _nodeA = null;
+  _nodeB = null;
+  _ghostPos = null;
+  dispatch({ type: 'SET_TOOL', payload: null });
+}
+
 function onKeyDown(e) {
   if (e.key === 'Escape' && getState().ui.activeTool === 'arc') {
     _step = 0;
@@ -230,12 +240,14 @@ export function initArcTool(canvas) {
   canvas.addEventListener('click', onClick);
   canvas.addEventListener('mousemove', onMouseMove);
   canvas.addEventListener('mouseleave', onMouseLeave);
+  canvas.addEventListener('contextmenu', onContextMenu);
   document.addEventListener('keydown', onKeyDown);
 
   return function detach() {
     canvas.removeEventListener('click', onClick);
     canvas.removeEventListener('mousemove', onMouseMove);
     canvas.removeEventListener('mouseleave', onMouseLeave);
+    canvas.removeEventListener('contextmenu', onContextMenu);
     document.removeEventListener('keydown', onKeyDown);
   };
 }

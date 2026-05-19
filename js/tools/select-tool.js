@@ -216,6 +216,103 @@ function onKeyDown(e) {
   dispatch({ type: 'SET_SELECTED', payload: [] });
 }
 
+// ─── Context menu ────────────────────────────────────────────────────────────
+
+let _contextMenu = null;
+
+function closeContextMenu() {
+  if (_contextMenu) {
+    _contextMenu.remove();
+    _contextMenu = null;
+  }
+}
+
+function openContextMenu(x, y, nodeId) {
+  closeContextMenu();
+
+  const menu = document.createElement('div');
+  menu.id = 'context-menu';
+  menu.style.left = `${x}px`;
+  menu.style.top  = `${y}px`;
+
+  const deleteBtn = document.createElement('button');
+  deleteBtn.className = 'context-menu-item danger';
+  deleteBtn.textContent = 'Delete';
+  deleteBtn.addEventListener('click', () => {
+    closeContextMenu();
+    deleteNodeWithWalls(nodeId);
+  });
+
+  menu.appendChild(deleteBtn);
+  document.body.appendChild(menu);
+  _contextMenu = menu;
+
+  // Adjust position if menu overflows viewport
+  const rect = menu.getBoundingClientRect();
+  if (rect.right > window.innerWidth)  menu.style.left = `${x - rect.width}px`;
+  if (rect.bottom > window.innerHeight) menu.style.top = `${y - rect.height}px`;
+}
+
+function deleteNodeWithWalls(nodeId) {
+  const level = getLevel();
+
+  const wallIds = level.walls
+    .filter(w => w.from === nodeId || w.to === nodeId)
+    .map(w => w.id);
+
+  const allIds = [nodeId, ...wallIds];
+
+  execute({
+    execute(s) {
+      const idx = s.ui.activeLevelIndex;
+      return {
+        map: {
+          ...s.map,
+          levels: s.map.levels.map((lvl, i) => {
+            if (i !== idx) return lvl;
+            return {
+              ...lvl,
+              nodes: lvl.nodes.filter(n => !allIds.includes(n.id)),
+              walls: lvl.walls.filter(w => !allIds.includes(w.id)),
+            };
+          }),
+        },
+      };
+    },
+  });
+
+  dispatch({ type: 'SET_SELECTED', payload: [] });
+}
+
+function onContextMenu(e) {
+  e.preventDefault();
+
+  const state = getState();
+  // Only handle right-click when no tool is active (or select tool)
+  if (state.ui.activeTool !== null && state.ui.activeTool !== 'select') return;
+
+  const { sx, sy } = screenCoords(e);
+  const camera = getCamera();
+  const world = screenToWorld(sx, sy, camera);
+  const level = getLevel();
+
+  const hitNode = isNearNode(world.x, world.y, level.nodes, camera, state.ui.gridSize, 10);
+  if (!hitNode) {
+    closeContextMenu();
+    return;
+  }
+
+  openContextMenu(e.clientX, e.clientY, hitNode.id);
+}
+
+function onDocumentClick(e) {
+  if (_contextMenu && !_contextMenu.contains(e.target)) {
+    closeContextMenu();
+  }
+}
+
+// ─── Hover renderer ──────────────────────────────────────────────────────────
+
 function renderHover(ctx, canvas, camera, state) {
   if (state.ui.activeTool !== 'select') return;
   const hoverId = state.ui._hoverNodeId;
@@ -247,13 +344,18 @@ export function initSelectTool(canvas) {
   canvas.addEventListener('mousemove', onMouseMove);
   canvas.addEventListener('mouseup', onMouseUp);
   canvas.addEventListener('click', onClick);
+  canvas.addEventListener('contextmenu', onContextMenu);
   document.addEventListener('keydown', onKeyDown);
+  document.addEventListener('click', onDocumentClick);
 
   return function detach() {
     canvas.removeEventListener('mousedown', onMouseDown);
     canvas.removeEventListener('mousemove', onMouseMove);
     canvas.removeEventListener('mouseup', onMouseUp);
     canvas.removeEventListener('click', onClick);
+    canvas.removeEventListener('contextmenu', onContextMenu);
     document.removeEventListener('keydown', onKeyDown);
+    document.removeEventListener('click', onDocumentClick);
+    closeContextMenu();
   };
 }

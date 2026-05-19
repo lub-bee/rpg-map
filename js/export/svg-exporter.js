@@ -214,9 +214,7 @@ function svgDecor(level, bounds) {
   return `<g id="decor">${out}</g>`;
 }
 
-function svgAreas(level, bounds, showAreas) {
-  if (!showAreas) return '';
-
+function svgAreas(level, bounds) {
   let out = '';
   for (const area of level.areas) {
     if (!area.nodeIds || area.nodeIds.length < 3) continue;
@@ -260,7 +258,7 @@ export function exportSVG(state) {
     `<rect width="${width}" height="${height}" fill="${bgColor}"/>`,
     svgWalls(level, bounds),
     svgDecor(level, bounds),
-    svgAreas(level, bounds, ui.showAreas),
+    svgAreas(level, bounds),
     `</svg>`,
   ];
 

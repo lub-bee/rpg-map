@@ -63,7 +63,8 @@
           <div class="swatches"></div>
         </section>
         <section id="element-panel">
-          <div class="panel-title">Elements</div>
+          <div class="panel-title">Wall Elements</div>
+          <p id="element-panel-hint" class="panel-placeholder">Select a wall to add elements (door, window, opening…)</p>
           <ul class="panel-list"></ul>
         </section>
       </div>
@@ -72,7 +73,16 @@
 
     <div id="statusbar">
       <span id="coords">x: 0, y: 0</span>
-      <span id="zoom">100%</span>
+      <span class="statusbar-sep">|</span>
+      <label class="statusbar-label" for="zoom-input">Zoom</label>
+      <input id="zoom-input" type="text" value="100%" title="Zoom (ex: 150%)">
+      <button id="zoom-reset" title="Reset zoom to 100%">Reset</button>
+      <button id="fit-btn" title="Fit view to map content">Fit</button>
+      <span class="statusbar-sep">|</span>
+      <label class="statusbar-label" for="grid-size-input">Grid</label>
+      <input id="grid-size-input" type="range" min="16" max="128" step="8" value="64" title="Grid size">
+      <span id="grid-size-value">64px</span>
+      <span class="statusbar-sep">|</span>
       <span id="active-tool">No tool</span>
     </div>
 

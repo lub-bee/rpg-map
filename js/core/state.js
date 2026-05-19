@@ -14,7 +14,6 @@ let _state = {
     activeLevelIndex: 0,
     gridSize: 64,
     selectedIds: [],
-    showAreas: false,
     activeLayer: LAYER.WALLS,
   },
 };
@@ -69,11 +68,6 @@ const _reducers = {
   SET_HOVER: (state, payload) => ({
     ...state,
     ui: { ...state.ui, _hoverNodeId: payload },
-  }),
-
-  TOGGLE_AREAS: (state) => ({
-    ...state,
-    ui: { ...state.ui, showAreas: !state.ui.showAreas },
   }),
 
   SET_LAYER: (state, payload) => ({

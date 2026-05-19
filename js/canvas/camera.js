@@ -2,6 +2,8 @@ import { screenToWorld } from './coords.js';
 
 const ZOOM_MIN = 0.1;
 const ZOOM_MAX = 10;
+// Max pixels of deltaY consumed per wheel event (avoids huge jumps on fast trackpad)
+const WHEEL_DELTA_CAP = 100;
 
 export function createCamera() {
   return { x: 0, y: 0, zoom: 1 };
@@ -26,6 +28,15 @@ export function zoomAt(camera, factor, pivotSx, pivotSy) {
   };
 }
 
+/**
+ * Set an absolute zoom level keeping the canvas center as pivot.
+ */
+export function setZoom(camera, newZoom, canvasWidth, canvasHeight) {
+  const cx = canvasWidth / 2;
+  const cy = canvasHeight / 2;
+  return zoomAt(camera, newZoom / camera.zoom, cx, cy);
+}
+
 export function attachCameraControls(canvas, onChange) {
   let camera = createCamera();
   let isPanning = false;
@@ -38,9 +49,16 @@ export function attachCameraControls(canvas, onChange) {
     onChange(camera);
   }
 
+  /** Expose a way to set the camera from outside (e.g. statusbar buttons). */
+  function setCamera(newCamera) {
+    update(newCamera);
+  }
+
   function onWheel(e) {
     e.preventDefault();
-    const factor = e.deltaY < 0 ? 1.1 : 0.9;
+    // Cap deltaY to avoid erratic jumps on trackpad (high-velocity events)
+    const delta = Math.max(-WHEEL_DELTA_CAP, Math.min(WHEEL_DELTA_CAP, e.deltaY));
+    const factor = delta < 0 ? 1.1 : 0.9;
     const rect = canvas.getBoundingClientRect();
     update(zoomAt(camera, factor, e.clientX - rect.left, e.clientY - rect.top));
   }
@@ -64,7 +82,7 @@ export function attachCameraControls(canvas, onChange) {
   }
 
   function onMouseUp(e) {
-    if (e.button === 1 || (e.button === 0 && spaceDown)) {
+    if (e.button === 1 || e.button === 0) {
       isPanning = false;
     }
   }
@@ -72,7 +90,11 @@ export function attachCameraControls(canvas, onChange) {
   function onKeyDown(e) {
     if (e.code === 'Space' && !e.repeat) {
       spaceDown = true;
-      e.preventDefault();
+      // Only prevent default when canvas (or body) has focus, not on text inputs
+      const tag = document.activeElement?.tagName;
+      if (tag !== 'INPUT' && tag !== 'TEXTAREA') {
+        e.preventDefault();
+      }
     }
   }
 
@@ -83,19 +105,29 @@ export function attachCameraControls(canvas, onChange) {
     }
   }
 
+  function onBlur() {
+    // Reset panning state when window loses focus
+    spaceDown = false;
+    isPanning = false;
+  }
+
   canvas.addEventListener('wheel', onWheel, { passive: false });
   canvas.addEventListener('mousedown', onMouseDown);
   window.addEventListener('mousemove', onMouseMove);
   window.addEventListener('mouseup', onMouseUp);
   window.addEventListener('keydown', onKeyDown);
   window.addEventListener('keyup', onKeyUp);
+  window.addEventListener('blur', onBlur);
 
-  return function detach() {
+  const detach = function () {
     canvas.removeEventListener('wheel', onWheel);
     canvas.removeEventListener('mousedown', onMouseDown);
     window.removeEventListener('mousemove', onMouseMove);
     window.removeEventListener('mouseup', onMouseUp);
     window.removeEventListener('keydown', onKeyDown);
     window.removeEventListener('keyup', onKeyUp);
+    window.removeEventListener('blur', onBlur);
   };
+
+  return { detach, setCamera, getCamera: () => camera };
 }

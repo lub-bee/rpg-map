@@ -1,5 +1,20 @@
 import { LAYER, ELEMENT_TYPE, createId } from './schema.js';
 
+// Dimensions en unités grille (1 case ≈ 1,5 m)
+export const ELEMENT_DIMENSIONS = {
+  table:      { width: 1.5, height: 1.5 },
+  chair:      { width: 0.7, height: 0.7 },
+  stool:      { width: 0.7, height: 0.7 },
+  tabouret:   { width: 0.7, height: 0.7 },
+  bed:        { width: 1.0, height: 2.0 },
+  candle:     { width: 0.3, height: 0.3 },
+  rug:        { width: 2.0, height: 3.0 },
+  carpet:     { width: 2.0, height: 3.0 },
+  fireplace:  { width: 1.5, height: 1.0 },
+  nightstand: { width: 0.6, height: 0.6 },
+  armchair:   { width: 1.0, height: 1.0 },
+};
+
 export const PRESETS = {
   'dining-set': {
     id: 'dining-set',

@@ -97,6 +97,7 @@ function onMouseLeave() {
 }
 
 function onClick(e) {
+  if (e.button !== 0) return;
   if (getState().ui.activeTool !== 'arc') return;
 
   const { wx, wy } = snapFromEvent(e);
@@ -139,6 +140,7 @@ function onClick(e) {
 function onContextMenu(e) {
   e.preventDefault();
   if (getState().ui.activeTool !== 'arc') return;
+  e.stopPropagation();
   _step = 0;
   _nodeA = null;
   _nodeB = null;

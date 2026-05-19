@@ -90,6 +90,7 @@ function onMouseLeave() {
 }
 
 function onClick(e) {
+  if (e.button !== 0) return;
   if (getState().ui.activeTool !== 'separator') return;
 
   const rect = e.currentTarget.getBoundingClientRect();
@@ -126,6 +127,7 @@ function onClick(e) {
 function onContextMenu(e) {
   e.preventDefault();
   if (getState().ui.activeTool !== 'separator') return;
+  e.stopPropagation();
   _chain = [];
   _ghostPos = null;
   dispatch({ type: 'SET_TOOL', payload: null });
